@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using ECommerceManagement.Models;
 using ECommerceManagement.Repositories;
 
@@ -10,7 +11,7 @@ public class ProductService
     private readonly ProductRepository _repository;
     public ProductService(ProductRepository repository) => _repository = repository;
 
-    public int Add(Product product)
+    public async Task<int> AddAsync(Product product)
     {
         if (string.IsNullOrWhiteSpace(product.ProductName))
             throw new ArgumentException("Product name is required.");
@@ -19,8 +20,8 @@ public class ProductService
         if (product.StockQuantity < 0)
             throw new ArgumentException("Stock cannot be negative.");
 
-        return _repository.Add(product);
+        return await _repository.AddAsync(product);
     }
 
-    public List<Product> GetAll() => _repository.GetAll();
+    public Task<List<Product>> GetAllAsync() => _repository.GetAllAsync();
 }

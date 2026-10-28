@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using ECommerceManagement.Models;
 using ECommerceManagement.Repositories;
 using ECommerceManagement.Services;
@@ -7,7 +8,7 @@ namespace ECommerceManagement;
 
 class Program
 {
-    static void Main(string[] args)
+    static async Task Main(string[] args)
     {
         var categoryRepo = new CategoryRepository();
         var productRepo = new ProductRepository();
@@ -21,7 +22,7 @@ class Program
         {
             Console.Clear();
             Console.WriteLine("========================================");
-            Console.WriteLine("  E-COMMERCE SYSTEM (BASE VERSION)      ");
+            Console.WriteLine("  E-COMMERCE SYSTEM (ASYNC VERSION)     ");
             Console.WriteLine("========================================");
             Console.WriteLine("1. Manage Categories");
             Console.WriteLine("2. Manage Products");
@@ -37,13 +38,13 @@ class Program
                 switch (choice)
                 {
                     case "1":
-                        ManageCategories(categoryService);
+                        await ManageCategoriesAsync(categoryService);
                         break;
                     case "2":
-                        ManageProducts(productService);
+                        await ManageProductsAsync(productService);
                         break;
                     case "3":
-                        ManageCustomers(customerService);
+                        await ManageCustomersAsync(customerService);
                         break;
                     case "0":
                         Console.WriteLine("Exiting application...");
@@ -63,7 +64,7 @@ class Program
         }
     }
 
-    private static void ManageCategories(CategoryService service)
+    private static async Task ManageCategoriesAsync(CategoryService service)
     {
         Console.Clear();
         Console.WriteLine("--- CATEGORIES ---");
@@ -73,18 +74,18 @@ class Program
         {
             Console.Write("Category Name: ");
             string name = Console.ReadLine() ?? "";
-            int id = service.Add(new Category { CategoryName = name });
+            int id = await service.AddAsync(new Category { CategoryName = name });
             Console.WriteLine($"Category added with ID: {id}");
         }
         else
         {
-            var list = service.GetAll();
+            var list = await service.GetAllAsync();
             foreach (var c in list)
                 Console.WriteLine($"{c.CategoryId,-5} | {c.CategoryName,-20} | Active: {c.IsActive}");
         }
     }
 
-    private static void ManageProducts(ProductService service)
+    private static async Task ManageProductsAsync(ProductService service)
     {
         Console.Clear();
         Console.WriteLine("--- PRODUCTS ---");
@@ -96,18 +97,25 @@ class Program
             Console.Write("Category ID: "); int catId = int.Parse(Console.ReadLine() ?? "1");
             Console.Write("Price: "); decimal price = decimal.Parse(Console.ReadLine() ?? "0");
             Console.Write("Stock: "); int stock = int.Parse(Console.ReadLine() ?? "0");
-            int id = service.Add(new Product { ProductName = name, CategoryId = catId, Price = price, StockQuantity = stock });
+
+            int id = await service.AddAsync(new Product
+            {
+                ProductName = name,
+                CategoryId = catId,
+                Price = price,
+                StockQuantity = stock
+            });
             Console.WriteLine($"Product added with ID: {id}");
         }
         else
         {
-            var list = service.GetAll();
+            var list = await service.GetAllAsync();
             foreach (var p in list)
                 Console.WriteLine($"{p.ProductId,-5} | {p.ProductName,-20} | {p.CategoryName,-15} | Rs.{p.Price:N2} | Stock: {p.StockQuantity}");
         }
     }
 
-    private static void ManageCustomers(CustomerService service)
+    private static async Task ManageCustomersAsync(CustomerService service)
     {
         Console.Clear();
         Console.WriteLine("--- CUSTOMERS ---");
@@ -118,12 +126,18 @@ class Program
             Console.Write("Full Name: "); string name = Console.ReadLine() ?? "";
             Console.Write("Email: "); string email = Console.ReadLine() ?? "";
             Console.Write("Phone: "); string phone = Console.ReadLine() ?? "";
-            int id = service.Register(new Customer { FullName = name, Email = email, Phone = phone });
+
+            int id = await service.RegisterAsync(new Customer
+            {
+                FullName = name,
+                Email = email,
+                Phone = phone
+            });
             Console.WriteLine($"Customer registered with ID: {id}");
         }
         else
         {
-            var list = service.GetAll();
+            var list = await service.GetAllAsync();
             foreach (var c in list)
                 Console.WriteLine($"{c.CustomerId,-5} | {c.FullName,-20} | {c.Email,-25} | {c.Phone}");
         }

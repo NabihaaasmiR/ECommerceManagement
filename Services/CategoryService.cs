@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using ECommerceManagement.Models;
 using ECommerceManagement.Repositories;
 
@@ -10,13 +11,13 @@ public class CategoryService
     private readonly CategoryRepository _repository;
     public CategoryService(CategoryRepository repository) => _repository = repository;
 
-    public int Add(Category category)
+    public async Task<int> AddAsync(Category category)
     {
         if (string.IsNullOrWhiteSpace(category.CategoryName))
             throw new ArgumentException("Category name is required.");
 
-        return _repository.Add(category);
+        return await _repository.AddAsync(category);
     }
 
-    public List<Category> GetAll() => _repository.GetAll();
+    public Task<List<Category>> GetAllAsync() => _repository.GetAllAsync();
 }
