@@ -53,3 +53,4 @@ C:\Users\NABIHA AASMI R\source\repos\ECommerceManagement\ECommerceManagement\obj
 C:\Users\NABIHA AASMI R\source\repos\ECommerceManagement\ECommerceManagement\obj\Debug\net10.0\ECommerceManagement.pdb
 C:\Users\NABIHA AASMI R\source\repos\ECommerceManagement\ECommerceManagement\obj\Debug\net10.0\ECommerceManagement.genruntimeconfig.cache
 C:\Users\NABIHA AASMI R\source\repos\ECommerceManagement\ECommerceManagement\obj\Debug\net10.0\ref\ECommerceManagement.dll
+C:\Users\NABIHA AASMI R\source\repos\ECommerceManagement\ECommerceManagement\obj\Debug\net10.0\ECommerceManagement.sourcelink.json
