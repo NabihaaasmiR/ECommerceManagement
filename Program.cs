@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.Data.SqlClient;
+using ECommerceManagement.Helpers;
 using ECommerceManagement.Models;
 using ECommerceManagement.Repositories;
 using ECommerceManagement.Services;
@@ -22,7 +24,7 @@ class Program
         {
             Console.Clear();
             Console.WriteLine("========================================");
-            Console.WriteLine("  E-COMMERCE SYSTEM (ASYNC VERSION)     ");
+            Console.WriteLine("  E-COMMERCE SYSTEM (VALIDATION VERSION) ");
             Console.WriteLine("========================================");
             Console.WriteLine("1. Manage Categories");
             Console.WriteLine("2. Manage Products");
@@ -54,9 +56,21 @@ class Program
                         break;
                 }
             }
+            catch (BusinessRuleException ex)
+            {
+                Console.WriteLine($"\n[Validation Error]: {ex.Message}");
+            }
+            catch (SqlException ex)
+            {
+                // Unique constraint violations (e.g., duplicate category name or duplicate email)
+                if (ex.Number == 2627 || ex.Number == 2601)
+                    Console.WriteLine("\n[Database Error]: A record with this name or email already exists.");
+                else
+                    Console.WriteLine($"\n[Database Error]: {ex.Message}");
+            }
             catch (Exception ex)
             {
-                Console.WriteLine($"\nError: {ex.Message}");
+                Console.WriteLine($"\n[Unexpected Error]: {ex.Message}");
             }
 
             Console.WriteLine("\nPress any key to continue...");
